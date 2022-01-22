@@ -1,67 +1,67 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BomberOf2048.Input;
 using BomberOf2048.Model;
 using BomberOf2048.Model.Data;
 using BomberOf2048.Utils;
 using BomberOf2048.Utils.Disposables;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace BomberOf2048.Controllers
 {
-    public class MainController : MonoBehaviour
+    public class MainController : IDisposable
     {
         private readonly CompositeDisposable _trash = new CompositeDisposable();
 
-        private InputManager _inputManager;
-        
         private GameData GameData => Singleton<GameSession>.Instance.Data;
         private AnimationController AnimationController => Singleton<GameSession>.Instance.AnimationController;
-        
+        private ScoreController ScoreController => Singleton<GameSession>.Instance.ScoreController;
+
         private int FieldSize => GameData.FieldSize;
 
-        private bool[,] _mergedSections;
+        private readonly bool[,] _mergedSections;
         private readonly List<int[]> _emptySections = new List<int[]>();
         
-        private Camera _mainCamera;
-        private BoomController _boomController;
+        private readonly Camera _mainCamera;
+        private readonly BoomController _boomController;
 
 
 
-        private void Start()
+        public MainController()
         {
-            _inputManager = Singleton<InputManager>.Instance;
+            var inputManager = Singleton<InputManager>.Instance;
             _mainCamera = Camera.main;
             _boomController = new BoomController();
-            _trash.Retain(_inputManager.SubscribeOnSwipe(OnSwipe));
-            _trash.Retain(_inputManager.SubscribeOnTapTouch(OnTap));
+            _trash.Retain(inputManager.SubscribeOnSwipe(OnSwipe));
+            _trash.Retain(inputManager.SubscribeOnTapTouch(OnTap));
 
 
             _mergedSections = new bool[FieldSize, FieldSize];
-            for (int i = 0; i < FieldSize; i++)
-            {
-                for (int j = 0; j < FieldSize; j++)
-                {
-                    _mergedSections[i,j] = false;
-                    
-                    
-                    /////////////////
-                    GameData.GameField[i,j].Value = 0;
-                    /////////////////
-                }
-            }
+            
+            /////////////////
+            ClearField();
+            /////////////////
             
             /////////////////
             GameData.CurrentScore.Value = 0;
+            //GameData.HighScore.Value = 0;
+            //GameData.Level.Value = 1;
+            //GameData.LevelScore.Value = 0;
+            
             GameData.GameField[0,0].Value = 11;
             /////////////////
-            
-            
+        }
+
+        
+
+        public void Initialize()
+        {
             SpawnRandomSections(false);
         }
 
         private void OnTap(Vector2 position, float time)
         {
-            //Debug.Log(position);
             var x = -1;
             var y = -1;
             
@@ -99,9 +99,7 @@ namespace BomberOf2048.Controllers
             if(y == -1)
                 return;
 
-            //Debug.Log($"Tapped on: ( {x}, {y} ).");
             _boomController.Boom(x, y, () => SpawnRandomSections(true));
-            
         }
 
 
@@ -131,7 +129,7 @@ namespace BomberOf2048.Controllers
                         _mergedSections[sectionToMerge[0], sectionToMerge[1]] = true;
 
                         var score = Mathf.Pow(2, GameData.GameField[sectionToMerge[0], sectionToMerge[1]].Value);
-                        GameData.CurrentScore.Value += (int)score;
+                        ScoreController.AddScore((int)score);
                         
                         AnimationController.Merge(section, sectionToMerge, startValue);
                         canSpawnNewSections = true;
@@ -162,6 +160,8 @@ namespace BomberOf2048.Controllers
                         if (!_boomController.IsHaveBombsOnField())
                         {
                             Debug.LogError("Game over!");
+                            WindowUtils.CreateWindow("UI/GameOverWindow");
+                            ClearField();
                         }
                     }
                 }
@@ -250,6 +250,18 @@ namespace BomberOf2048.Controllers
             }
         }
 
+        private void ClearField()
+        {
+            for (int i = 0; i < FieldSize; i++)
+            {
+                for (int j = 0; j < FieldSize; j++)
+                {
+                    _mergedSections[i,j] = false;
+                    GameData.GameField[i,j].Value = 0;
+                }
+            }
+        }
+        
         private bool IsFieldFull()
         {
             var emptySections = new List<int[]>();
@@ -318,12 +330,11 @@ namespace BomberOf2048.Controllers
                 }
             }
         }
+        
 
-        private void OnDestroy()
+        public void Dispose()
         {
             _trash.Dispose();
         }
     }
-
-    
 }

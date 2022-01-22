@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace BomberOf2048.UI.Widgets
 {
-    public class ScoreWidget : MonoBehaviour
+    public class CurrentScoreWidget : MonoBehaviour
     {
         [SerializeField] private Text _score;
 

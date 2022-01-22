@@ -8,15 +8,19 @@ using UnityEngine;
 
 namespace BomberOf2048.Controllers
 {
-    public class AnimationController : MonoBehaviour
+    public class AnimationController : IDisposable
     {
-        [SerializeField] private GameObject _prefab;
-
-        private FieldViewController FieldViewController => Singleton<GameSession>.Instance.FieldViewController;
         public Vector3[,] SectionsPos => FieldViewController.SectionsPos;
-
         public float SectionSize => FieldViewController.SectionSize;
-
+        
+        private readonly GameObject _prefabSectionForAnim;
+        private FieldViewController FieldViewController => Singleton<GameSession>.Instance.FieldViewController;
+        
+        public AnimationController(GameObject prefabSectionForAnim)
+        {
+            _prefabSectionForAnim = prefabSectionForAnim;
+        }
+        
         public void Move(int[] from, int[] to, int sectionValue)
         {
             AnimationMoveAndMerge(from, to, sectionValue, false);
@@ -29,7 +33,7 @@ namespace BomberOf2048.Controllers
         
         public void Spawn(int[] pos, int sectionValue, bool haveDelay)
         {
-            var item = Pool.Instance.Get(_prefab, Vector3.zero, Vector3.one);
+            var item = Pool.Instance.Get(_prefabSectionForAnim, Vector3.zero, Vector3.one);
             var animationWidget = item.GetComponent<AnimationSectionComponent>();
 
             var newPos = SectionsPos[pos[0], pos[1]];
@@ -39,7 +43,7 @@ namespace BomberOf2048.Controllers
 
         public void Boom(int[] pos, int sectionValue)
         {
-            var item = Pool.Instance.Get(_prefab, Vector3.zero, Vector3.one);
+            var item = Pool.Instance.Get(_prefabSectionForAnim, Vector3.zero, Vector3.one);
             var animationWidget = item.GetComponent<AnimationSectionComponent>();
             
             FieldViewController.UpdateSection(pos[0], pos[1]);
@@ -52,7 +56,7 @@ namespace BomberOf2048.Controllers
 
         private void AnimationMoveAndMerge(int[] from, int[] to, int sectionValue, bool isMerge)
         {
-            var item = Pool.Instance.Get(_prefab, Vector3.zero, Vector3.one);
+            var item = Pool.Instance.Get(_prefabSectionForAnim, Vector3.zero, Vector3.one);
             var animationWidget = item.GetComponent<AnimationSectionComponent>();
             
             FieldViewController.UpdateSection(from[0], from[1]);
@@ -67,9 +71,11 @@ namespace BomberOf2048.Controllers
                 animationWidget.Move(fromPos, toPos, sectionValue, () => FieldViewController.UpdateSection(to[0], to[1]));
 
         }
-        
-        
-        
-        
+
+
+        public void Dispose()
+        {
+            
+        }
     }
 }

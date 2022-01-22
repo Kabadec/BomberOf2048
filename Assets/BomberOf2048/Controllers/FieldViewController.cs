@@ -7,34 +7,27 @@ using BomberOf2048.Model.Definitions;
 using BomberOf2048.Utils;
 using BomberOf2048.Widgets;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace BomberOf2048.Controllers
 {
-    public class FieldViewController : MonoBehaviour
+    public class FieldViewController : IDisposable
     {
-        
-        [Space]
-        //[SerializeField] private SpriteRenderer _bgField;
-        [SerializeField] private GameObject _sectionPrefab;
-        [SerializeField] private GameObject _fieldContainer;
-
-        //[Header("Sizes and Spaces")]
-        //[SerializeField] private float _spaceBehindSections;
-        //[SerializeField] private float _leftRightUpDownSpace;
-        
-        
         public float SectionSize { get; private set; }
         public Vector3[,] SectionsPos { get; private set; }
         
-
+        
+        private readonly GameObject _sectionPrefab;
+        private readonly GameObject _fieldContainer;
         private GameData GameData => Singleton<GameSession>.Instance.Data;
-        
         private int FieldSize => GameData.FieldSize;
-        
         private SectionComponent[] _sectionWidgets;
-
-        private void Start()
+        
+        public FieldViewController(GameObject sectionPrefab, GameObject fieldContainer)
         {
+            _sectionPrefab = sectionPrefab;
+            _fieldContainer = fieldContainer;
+            
             SectionSize = DefsFacade.I.Fields.GetSectionScale(FieldSize);
             SectionsPos = new Vector3[FieldSize, FieldSize];
             
@@ -49,7 +42,6 @@ namespace BomberOf2048.Controllers
             BuildField();
             UpdateAllField();
         }
-        
         
         [ContextMenu("Update All Field")]
         public void UpdateAllField()
@@ -86,7 +78,7 @@ namespace BomberOf2048.Controllers
                 var numChildForInstantiate = FieldSize * FieldSize - childs.Length;
                 for (var i = 0; i < numChildForInstantiate; i++)
                 {
-                    Instantiate(_sectionPrefab, Vector3.zero, Quaternion.identity, _fieldContainer.transform);
+                    Object.Instantiate(_sectionPrefab, Vector3.zero, Quaternion.identity, _fieldContainer.transform);
                 }
             }
             else if (childs.Length > FieldSize * FieldSize)
@@ -115,42 +107,18 @@ namespace BomberOf2048.Controllers
             var number = x + y * FieldSize;
             return _sectionWidgets[number];
         }
+        
 
-        // private float GetSectionSize()
-        // {
-        //     var bgSize = _bgField.size.x - _leftRightUpDownSpace * 2;
-        //     var sectionSize = (bgSize - (FieldSize - 1) * _spaceBehindSections) / FieldSize;
-        //     return sectionSize;
-        // }
-        //
-        // private Vector3 GetSectionPos(int x, int y)
-        // {
-        //     var bgSize = _bgField.size.x - _leftRightUpDownSpace * 2;
-        //     var bgPos = _bgField.transform.position;
-        //     var sectionSize = GetSectionSize();
-        //     var pos = Vector3.zero;
-        //
-        //     pos.x = bgPos.x - bgSize / 2 + sectionSize / 2 + _spaceBehindSections * x + sectionSize * x;
-        //     pos.y = bgPos.y - bgSize / 2 + sectionSize / 2 + _spaceBehindSections * y + sectionSize * y;
-        //
-        //     return pos;
-        // }
-        
-        
-        
-#if UNITY_EDITOR
-        private void OnValidate()
+        public void Dispose()
         {
-            //BuildField();
+            
         }
-#endif
-        
     }
-    [Serializable]
-    public class SectionData
-    {
-        private int _value = 0;
-
-        public int Value => _value;
-    }
+    // [Serializable]
+    // public class SectionData
+    // {
+    //     private int _value = 0;
+    //
+    //     public int Value => _value;
+    // }
 }

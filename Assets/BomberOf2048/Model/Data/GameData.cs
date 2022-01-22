@@ -13,21 +13,26 @@ namespace BomberOf2048.Model.Data
         [SerializeField] private int _fieldSize = 4;
         [Space]
         [SerializeField] private bool _isTutorialAcceptDefault;
-        [SerializeField] private bool _musicDefault;
-        [SerializeField] private bool _vibrationDefault;
         [SerializeField] private int _levelDefault;
+        [SerializeField] private int _levelScoreDefault;
         [SerializeField] private int _currentScoreDefault;
+        [SerializeField] private int _highScoreDefault;
 
 
         public int FieldSize => _fieldSize;
         public BoolPersistentProperty IsTutorialAccept { get; private set; }
-        public BoolPersistentProperty Music { get; private set; }
-        public BoolPersistentProperty Vibration { get; private set; }
         public IntPersistentProperty Level { get; private set; }
+        public IntPersistentProperty LevelScore { get; private set; }
         public IntPersistentProperty CurrentScore { get; private set; }
+        public IntPersistentProperty HighScore { get; private set; }
         public IntPersistentProperty[,] GameField { get; private set; }
+        
+        public FloatProperty LevelProgress { get; private set; }
 
         public const string LeaderBoardId = "CgkIj5XU1I8EEAIQAQ";
+
+        
+        
 
         
         private readonly CompositeDisposable _trash = new CompositeDisposable();
@@ -50,11 +55,13 @@ namespace BomberOf2048.Model.Data
             });
             
             IsTutorialAccept = new BoolPersistentProperty(_isTutorialAcceptDefault, GameDataProperties.Tutorial.ToString());
-            Music = new BoolPersistentProperty(_musicDefault, GameDataProperties.Music.ToString());
-            Vibration = new BoolPersistentProperty(_vibrationDefault, GameDataProperties.Vibration.ToString());
             Level = new IntPersistentProperty(_levelDefault, GameDataProperties.Level.ToString());
+            LevelScore = new IntPersistentProperty(_levelScoreDefault, GameDataProperties.LevelScore.ToString());
             CurrentScore = new IntPersistentProperty(_currentScoreDefault, GameDataProperties.CurrentScore.ToString());
-
+            HighScore = new IntPersistentProperty(_highScoreDefault, GameDataProperties.HighScore.ToString());
+            LevelProgress = new FloatProperty();
+            LevelProgress.Value = 0f;
+            
             GameField = new IntPersistentProperty[_fieldSize,_fieldSize];
             for (int i = 0; i < _fieldSize; i++)
             {
@@ -68,19 +75,25 @@ namespace BomberOf2048.Model.Data
             _trash.Retain(CurrentScore.SubscribeAndInvoke(OnCurrentScoreChanged));   
         }
 
+
+        
+        
+
         private void OnCurrentScoreChanged(int newvalue, int oldvalue)
         {
             Social.ReportScore(CurrentScore.Value, LeaderBoardId, b => {});
         }
+        
+        
     }
 
     public enum GameDataProperties
     {
         Tutorial,
-        Music,
-        Vibration,
         Level,
+        LevelScore,
         CurrentScore,
+        HighScore,
         GameField
     }
 }

@@ -2,14 +2,19 @@
 using BomberOf2048.Controllers;
 using BomberOf2048.Model.Data;
 using BomberOf2048.Utils;
+using BomberOf2048.Utils.Disposables;
 using UnityEngine;
 
 namespace BomberOf2048.Model
 {
-    [RequireComponent(typeof(MainController), typeof(AnimationController), typeof(FieldViewController))]
     public class GameSession : Singleton<GameSession>
     {
         [SerializeField] private GameData _data;
+
+        [SerializeField] private GameObject _sectionPrefab;
+        [SerializeField] private GameObject _fieldContainer;
+        [SerializeField] private GameObject _prefabSectionForAnim;
+        
 
         
         public GameData Data => _data;
@@ -17,14 +22,28 @@ namespace BomberOf2048.Model
         public MainController MainController { get; private set; }
         public FieldViewController FieldViewController { get; private set; }
         public AnimationController AnimationController { get; private set; }
+        public ScoreController ScoreController { get; private set; }
+
+        private readonly CompositeDisposable _trash = new CompositeDisposable();
 
         private void Awake()
         {
             Initialization();
-            MainController = GetComponent<MainController>();
-            FieldViewController = GetComponent<FieldViewController>();
-            AnimationController = GetComponent<AnimationController>();
             
+            MainController = new MainController();
+            _trash.Retain(MainController);
+            
+            FieldViewController = new FieldViewController(_sectionPrefab, _fieldContainer);
+            _trash.Retain(FieldViewController);
+            
+            AnimationController = new AnimationController(_prefabSectionForAnim);
+            _trash.Retain(AnimationController);
+
+            ScoreController = new ScoreController();
+            _trash.Retain(ScoreController);
+            ScoreController.AddScore(0);
+            
+            MainController.Initialize();
         }
 
         private void Start()
@@ -35,6 +54,12 @@ namespace BomberOf2048.Model
         private void Initialization()
         {
             _data.Initialize();
+        }
+
+
+        private void OnDestroy()
+        {
+            _trash.Dispose();
         }
     }
 }

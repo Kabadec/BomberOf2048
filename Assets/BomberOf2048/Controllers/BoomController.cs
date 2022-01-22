@@ -11,6 +11,8 @@ namespace BomberOf2048.Controllers
         private GameData GameData => Singleton<GameSession>.Instance.Data;
         
         private AnimationController AnimationController => Singleton<GameSession>.Instance.AnimationController;
+        private ScoreController ScoreController => Singleton<GameSession>.Instance.ScoreController;
+
         
         private int FieldSize => GameData.FieldSize;
         
@@ -114,7 +116,7 @@ namespace BomberOf2048.Controllers
                 var value = GameData.GameField[x, y].Value;
                 
                 var score = Mathf.Pow(2, value);
-                GameData.CurrentScore.Value += (int)score;
+                ScoreController.AddScore((int)score);
                 
                 GameData.GameField[x, y].Value = 0;
                 
