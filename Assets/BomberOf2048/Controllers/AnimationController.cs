@@ -3,7 +3,6 @@ using BomberOf2048.Components.Sections;
 using BomberOf2048.Model;
 using BomberOf2048.Utils;
 using BomberOf2048.Utils.ObjectPool;
-using BomberOf2048.Widgets;
 using UnityEngine;
 
 namespace BomberOf2048.Controllers
@@ -19,6 +18,18 @@ namespace BomberOf2048.Controllers
         public AnimationController(GameObject prefabSectionForAnim)
         {
             _prefabSectionForAnim = prefabSectionForAnim;
+
+            var numItems = 4;
+            GameObject[] items = new GameObject[numItems];
+            for (var i = 0; i < numItems; i++)
+            {
+                items[i] = Pool.Instance.Get(_prefabSectionForAnim, Vector3.zero, Vector3.one);
+            }
+
+            for (int i = 0; i < numItems; i++)
+            {
+                items[i].GetComponent<PoolItem>().Release();
+            }
         }
         
         public void Move(int[] from, int[] to, int sectionValue)

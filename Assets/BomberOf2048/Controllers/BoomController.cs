@@ -2,6 +2,7 @@
 using BomberOf2048.Model;
 using BomberOf2048.Model.Data;
 using BomberOf2048.Utils;
+using BomberOf2048.Utils.ObjectPool;
 using UnityEngine;
 
 namespace BomberOf2048.Controllers
@@ -12,34 +13,61 @@ namespace BomberOf2048.Controllers
         
         private AnimationController AnimationController => Singleton<GameSession>.Instance.AnimationController;
         private ScoreController ScoreController => Singleton<GameSession>.Instance.ScoreController;
+        private FieldViewController FieldViewController => Singleton<GameSession>.Instance.FieldViewController;
 
         
         private int FieldSize => GameData.FieldSize;
+
+        private readonly GameObject _preMiddleParticles;
+        
+        public BoomController(GameObject preMiddleParticles)
+        {
+            _preMiddleParticles = preMiddleParticles;
+        }
         
         public void Boom(int x, int y, Action onComplete)
         {
             var value = GameData.GameField[x, y].Value;
-            var checker = true;
+            
+            var checker = ValueBoom(value, x, y);
+            
+            if(checker)
+                onComplete?.Invoke();
+        }
+
+        private bool ValueBoom(int value, int x, int y)
+        {
             switch (value)
             {
                 case 8:
                     LittleBoom(x, y);
+                    SpawnParticles(x, y);
                     break;
                 case 9:
                     PreMiddleBoom(x, y);
+                    SpawnParticles(x, y);
                     break;
                 case 10:
                     MiddleBoom(x, y);
+                    SpawnParticles(x, y);
                     break;
                 case 11:
                     BigBoom();
+                    SpawnParticles(x, y);
                     break;
                 default:
-                    checker = false;
-                    break;
+                    return false;
+                    //break;
             }
-            if(checker)
-                onComplete?.Invoke();
+
+            return true;
+        }
+
+        public void SpawnParticles(int x, int y)
+        {
+            var particlePos = new Vector3(FieldViewController.SectionsPos[x, y].x,
+                FieldViewController.SectionsPos[x, y].y, 0f);
+            Pool.Instance.Get(_preMiddleParticles, particlePos, Vector3.one);
         }
 
         public bool IsHaveBombsOnField()

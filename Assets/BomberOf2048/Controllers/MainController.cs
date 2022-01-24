@@ -17,6 +17,7 @@ namespace BomberOf2048.Controllers
         private GameData GameData => Singleton<GameSession>.Instance.Data;
         private AnimationController AnimationController => Singleton<GameSession>.Instance.AnimationController;
         private ScoreController ScoreController => Singleton<GameSession>.Instance.ScoreController;
+        private BoomController BoomController => Singleton<GameSession>.Instance.BoomController;
 
         private int FieldSize => GameData.FieldSize;
 
@@ -24,7 +25,7 @@ namespace BomberOf2048.Controllers
         private readonly List<int[]> _emptySections = new List<int[]>();
         
         private readonly Camera _mainCamera;
-        private readonly BoomController _boomController;
+        //private readonly BoomController _boomController;
 
 
 
@@ -32,7 +33,7 @@ namespace BomberOf2048.Controllers
         {
             var inputManager = Singleton<InputManager>.Instance;
             _mainCamera = Camera.main;
-            _boomController = new BoomController();
+            //_boomController = new BoomController();
             _trash.Retain(inputManager.SubscribeOnSwipe(OnSwipe));
             _trash.Retain(inputManager.SubscribeOnTapTouch(OnTap));
 
@@ -49,7 +50,15 @@ namespace BomberOf2048.Controllers
             //GameData.Level.Value = 1;
             //GameData.LevelScore.Value = 0;
             
-            GameData.GameField[0,0].Value = 11;
+            
+            
+            GameData.GameField[0,0].Value = 8;
+            //GameData.GameField[0,2].Value = 9;
+            //GameData.GameField[3,0].Value = 10;
+            //GameData.GameField[3,3].Value = 11;
+            
+            
+            
             /////////////////
         }
 
@@ -99,7 +108,7 @@ namespace BomberOf2048.Controllers
             if(y == -1)
                 return;
 
-            _boomController.Boom(x, y, () => SpawnRandomSections(true));
+            BoomController.Boom(x, y, () => SpawnRandomSections(true));
         }
 
 
@@ -149,15 +158,17 @@ namespace BomberOf2048.Controllers
                 }
             }
 
-            if(canSpawnNewSections)
+            if (canSpawnNewSections)
+            {
                 SpawnRandomSections(false);
+            }
             else
             {
                 if (IsFieldFull())
                 {
                     if (!IsFieldHaveSomeMerges())
                     {
-                        if (!_boomController.IsHaveBombsOnField())
+                        if (!BoomController.IsHaveBombsOnField())
                         {
                             Debug.LogError("Game over!");
                             WindowUtils.CreateWindow("UI/GameOverWindow");
@@ -179,7 +190,7 @@ namespace BomberOf2048.Controllers
                 x >= 0 && x < FieldSize && y >= 0 && y < FieldSize;
                 x += (int) swipeSide.x, y += (int) swipeSide.y)
             {
-                if(GameData.GameField[x, y].Value == 0 || GameData.GameField[x, y].Value == 10)
+                if(GameData.GameField[x, y].Value == 0/* || GameData.GameField[x, y].Value == 10*/)
                     continue;
 
                 if (GameData.GameField[x, y].Value == GameData.GameField[section[0], section[1]].Value
@@ -228,7 +239,7 @@ namespace BomberOf2048.Controllers
                 }
             }
             
-            for (var i = 0; i < 2; i++)
+            for (var i = 0; i < 1; i++)
             {
                 if (_emptySections.Count == 0)
                     return;

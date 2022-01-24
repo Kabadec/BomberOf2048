@@ -11,7 +11,7 @@ namespace BomberOf2048.Controllers
         private GameData GameData => Singleton<GameSession>.Instance.Data;
 
         public const float FirstLevelScore = 600f;
-        public const float NextLevelModifier = 1.1f;
+        public const float NextLevelModifier = 1.07f;
 
         public ScoreController()
         {

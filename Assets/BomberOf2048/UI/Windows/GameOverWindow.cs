@@ -27,7 +27,6 @@ namespace BomberOf2048.UI.Windows
             Singleton<GameSession>.Instance.FieldViewController.UpdateAllField();
             Singleton<GameSession>.Instance.MainController.Initialize();
             Singleton<GameSession>.Instance.Data.CurrentScore.Value = 0;
-            Debug.Log("OnCloseAnimationComplete");
             base.OnCloseAnimationComplete();
         }
     }

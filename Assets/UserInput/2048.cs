@@ -47,7 +47,7 @@ public class @_2048 : IInputActionCollection, IDisposable
                     ""type"": ""Button"",
                     ""id"": ""b0df3db2-4662-4248-ab24-0cdca1e9bd6e"",
                     ""expectedControlType"": ""Button"",
-                    ""processors"": """",
+                    ""processors"": ""AxisDeadzone"",
                     ""interactions"": """"
                 }
             ],

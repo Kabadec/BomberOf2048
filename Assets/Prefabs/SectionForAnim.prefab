@@ -30,9 +30,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 2060596089884654999}
   - {fileID: 3089171186945328874}
   - {fileID: 6650744286592517251}
-  - {fileID: 2060596089884654999}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -116,7 +116,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 908989776919268430}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &434332171948997634
 SpriteRenderer:
@@ -198,7 +198,7 @@ Transform:
   m_LocalScale: {x: 0.55, y: 0.55, z: 1}
   m_Children: []
   m_Father: {fileID: 908989776919268430}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7605741500763577794
 SpriteRenderer:
@@ -261,7 +261,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2060596089884654999}
   - component: {fileID: 1972836834728399238}
-  - component: {fileID: 6062580101262265837}
+  - component: {fileID: 5835539980824375954}
   m_Layer: 0
   m_Name: effect
   m_TagString: Untagged
@@ -281,7 +281,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 908989776919268430}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1972836834728399238
 SpriteRenderer:
@@ -322,19 +322,19 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1106733277
   m_SortingLayer: 2
-  m_SortingOrder: 4
-  m_Sprite: {fileID: -6319377482261974660, guid: e74b0552e218b074db366bac2ad867da, type: 3}
+  m_SortingOrder: 11
+  m_Sprite: {fileID: 21300000, guid: d713ece795f10aa468b3d5f539282afe, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6062580101262265837
+--- !u!114 &5835539980824375954
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -343,8 +343,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7602962563150312142}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d263256f29a94db78af559b795fb92ba, type: 3}
+  m_Script: {fileID: 11500000, guid: a9811a2dd3644adca507b2378635be4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timeAnimation: 1
   _renderer: {fileID: 1972836834728399238}

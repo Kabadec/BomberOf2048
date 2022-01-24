@@ -1,9 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace BomberOf2048.Widgets
+namespace BomberOf2048.Components
 {
-    public class BgWidget : MonoBehaviour
+    public class BgComponent : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
 
@@ -13,7 +12,7 @@ namespace BomberOf2048.Widgets
             var spriteSize = _spriteRenderer.size;
             
             var spriteSizeY = aspectRatio * spriteSize.x;
-            var newSpriteSize = new Vector2(spriteSize.x, spriteSizeY);
+            var newSpriteSize = new Vector2(spriteSize.x, (spriteSizeY + 2));
 
             _spriteRenderer.size = newSpriteSize;
         }

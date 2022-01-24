@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using BomberOf2048.Utils;
 using BomberOf2048.Utils.Disposables;
 using UnityEngine;
@@ -25,8 +26,11 @@ namespace BomberOf2048.Input
 
         private bool _isTouchStarted = false;
         private Vector2 _startTouchPos;
+        private bool _isFirstTouch = true;
         
         private Vector2 TouchPosition => _touchControls.Touch.TouchPosition.ReadValue<Vector2>();
+        
+        
 
         private void Awake()
         {
@@ -41,7 +45,8 @@ namespace BomberOf2048.Input
 
         private void Update()
         {
-            if(!_isTouchStarted)
+            //Debug.Log(TouchPosition);
+            if(!_isTouchStarted || _isFirstTouch)
                 return;
             if(Vector2.Distance(_startTouchPos, TouchPosition) < _deadZone)
                 return;
@@ -62,6 +67,12 @@ namespace BomberOf2048.Input
         {
             if(InputLocker.IsLocked)
                 return;
+            if (_isFirstTouch)
+            {
+                StartCoroutine(FirstTouchCoroutine());
+                return;
+            }
+            
             _isTouchStarted = true;
             _startTouchPos = TouchPosition;
         }
@@ -88,6 +99,14 @@ namespace BomberOf2048.Input
         {
             OnSwipeEvent += call;
             return new ActionDisposable(() => OnSwipeEvent -= call);
+        }
+
+        private IEnumerator FirstTouchCoroutine()
+        {
+            yield return new WaitForSeconds(0.07f);
+            _isTouchStarted = true;
+            _isFirstTouch = false;
+            _startTouchPos = TouchPosition;
         }
         
         private void OnEnable()
