@@ -7,7 +7,7 @@ namespace BomberOf2048.Components.Sections
     {
         [SerializeField] private SpriteRenderer _sprite;
         [SerializeField] private GameObject _effect;
-        [SerializeField] private float _size = 2f;
+        [SerializeField] private float _scale = 1f;
 
         public int[] CoordinatesSection { get; private set; } = {-1, -1};
 
@@ -16,12 +16,12 @@ namespace BomberOf2048.Components.Sections
             _sprite.sprite = sectionDef.Sprite;
             _effect.SetActive(sectionDef.IsEffectEnable);
         }
-        public void SetSize(float size)
+        public void SetScale(float scale)
         {
-            _sprite.transform.localScale = new Vector3(size, size, 1f);
-            _effect.transform.localScale = new Vector3(size, size, 1f);
+            _sprite.transform.localScale = new Vector3(scale, scale, 1f);
+            _effect.transform.localScale = new Vector3(scale, scale, 1f);
 
-            _size = size;
+            _scale = scale;
         }
 
         public void SetCoordinates(int x, int y)
@@ -31,10 +31,10 @@ namespace BomberOf2048.Components.Sections
         }
         
         [ContextMenu("Set Size")]
-        private void SetSize()
+        private void SetScale()
         {
-            _sprite.transform.localScale = new Vector3(_size, _size, 1f);
-            _effect.transform.localScale = new Vector3(_size, _size, 1f);
+            _sprite.transform.localScale = new Vector3(_scale, _scale, 1f);
+            _effect.transform.localScale = new Vector3(_scale, _scale, 1f);
         }
     }
 }

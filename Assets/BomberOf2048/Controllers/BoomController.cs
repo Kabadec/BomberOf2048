@@ -149,7 +149,7 @@ namespace BomberOf2048.Controllers
                 GameData.GameField[x, y].Value = 0;
                 
                 AnimationController.Boom(pos, value);
-
+                ValueBoom(value, x, y);
             }
         }
     }

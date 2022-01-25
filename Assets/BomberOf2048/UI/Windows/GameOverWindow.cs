@@ -25,7 +25,7 @@ namespace BomberOf2048.UI.Windows
         {
             InputLocker.Release(this);
             Singleton<GameSession>.Instance.FieldViewController.UpdateAllField();
-            Singleton<GameSession>.Instance.MainController.Initialize();
+            Singleton<GameSession>.Instance.MainController.SpawnStartSections();
             Singleton<GameSession>.Instance.Data.CurrentScore.Value = 0;
             base.OnCloseAnimationComplete();
         }

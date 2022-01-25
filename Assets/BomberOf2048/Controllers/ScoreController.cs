@@ -1,4 +1,5 @@
 ﻿using System;
+using BomberOf2048.Components;
 using BomberOf2048.Model;
 using BomberOf2048.Model.Data;
 using BomberOf2048.Utils;
@@ -10,12 +11,14 @@ namespace BomberOf2048.Controllers
     {
         private GameData GameData => Singleton<GameSession>.Instance.Data;
 
-        public const float FirstLevelScore = 600f;
-        public const float NextLevelModifier = 1.07f;
+        private const float FirstLevelScore = 600f;
+        private const float NextLevelModifier = 1.07f;
 
-        public ScoreController()
+        private readonly LevelUpParticlesComponent _levelUpParticles;
+
+        public ScoreController(LevelUpParticlesComponent levelUpParticles)
         {
-            
+            _levelUpParticles = levelUpParticles;
         }
 
         public void AddScore(int score)
@@ -37,6 +40,7 @@ namespace BomberOf2048.Controllers
                 GameData.LevelScore.Value = (int)newLevelScore;
                 
                 Debug.Log("Level Up!");
+                _levelUpParticles.SpawnLevelUpParticles();
             }
 
             GameData.LevelProgress.Value = GameData.LevelScore.Value / scoreForNextLevel;

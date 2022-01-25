@@ -10,7 +10,9 @@ namespace BomberOf2048.Input
     [DefaultExecutionOrder(-1)]
     public class InputManager : Singleton<InputManager>
     {
-        [SerializeField] private float _deadZone = 70f;
+        [SerializeField] private float _swipeDeadZone = 70f;
+        [SerializeField] private float _tapDeadZone = 10f;
+        [SerializeField] private float _tapMaxTime = 0.5f;
 
         
         public delegate void TapTouchEvent(Vector2 position, float time);
@@ -26,6 +28,7 @@ namespace BomberOf2048.Input
 
         private bool _isTouchStarted = false;
         private Vector2 _startTouchPos;
+        private float _startTouchTime;
         private bool _isFirstTouch = true;
         
         private Vector2 TouchPosition => _touchControls.Touch.TouchPosition.ReadValue<Vector2>();
@@ -46,10 +49,27 @@ namespace BomberOf2048.Input
         private void Update()
         {
             //Debug.Log(TouchPosition);
-            if(!_isTouchStarted || _isFirstTouch)
+            if (!_isTouchStarted || _isFirstTouch)
+            {
+                
+                
+                
                 return;
-            if(Vector2.Distance(_startTouchPos, TouchPosition) < _deadZone)
+            }
+            
+            
+            if (Vector2.Distance(_startTouchPos, TouchPosition) < _swipeDeadZone)
+            {
+                
+                
+                
+                
                 return;
+            }
+            
+            
+            
+            
             var dist = TouchPosition - _startTouchPos;
             if (Mathf.Abs(dist.x) >= Mathf.Abs(dist.y))
             {
@@ -75,6 +95,7 @@ namespace BomberOf2048.Input
             
             _isTouchStarted = true;
             _startTouchPos = TouchPosition;
+            _startTouchTime = Time.time;
         }
         
         private void EndTouch(InputAction.CallbackContext context)
@@ -107,6 +128,7 @@ namespace BomberOf2048.Input
             _isTouchStarted = true;
             _isFirstTouch = false;
             _startTouchPos = TouchPosition;
+            _startTouchTime = Time.time;
         }
         
         private void OnEnable()

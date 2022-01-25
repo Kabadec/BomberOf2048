@@ -40,7 +40,7 @@ namespace BomberOf2048.Components.Sections
         {
             _sectionComponent = GetComponent<SectionComponent>();
             _poolItem = GetComponent<PoolItem>();
-            _sectionComponent.SetSize(FieldViewController.SectionSize);
+            _sectionComponent.SetScale(FieldViewController.SectionScale);
         }
 
         public void Move(Vector3 from, Vector3 to, int sectionValue, Action onComplete)

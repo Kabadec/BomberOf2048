@@ -12,7 +12,7 @@ namespace BomberOf2048.Controllers
 {
     public class FieldViewController : IDisposable
     {
-        public float SectionSize { get; private set; }
+        public float SectionScale { get; private set; }
         public Vector3[,] SectionsPos { get; private set; }
         
         
@@ -27,7 +27,7 @@ namespace BomberOf2048.Controllers
             _sectionPrefab = sectionPrefab;
             _fieldContainer = fieldContainer;
             
-            SectionSize = DefsFacade.I.Fields.GetSectionScale(FieldSize);
+            SectionScale = DefsFacade.I.Fields.GetSectionScale(FieldSize);
             SectionsPos = new Vector3[FieldSize, FieldSize];
             
             for (var i = 0; i < FieldSize; i++)
@@ -95,7 +95,7 @@ namespace BomberOf2048.Controllers
                 for (var j = 0; j < FieldSize; j++)
                 {
                     var section = GetSection(j, i);
-                    section.SetSize(SectionSize);
+                    section.SetScale(SectionScale);
                     section.transform.position = SectionsPos[j, i];
                 }
             }

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using BomberOf2048.Components;
 using BomberOf2048.Input;
+using BomberOf2048.Managers;
 using BomberOf2048.Model;
 using BomberOf2048.Model.Data;
 using BomberOf2048.Utils;
@@ -25,15 +28,12 @@ namespace BomberOf2048.Controllers
         private readonly List<int[]> _emptySections = new List<int[]>();
         
         private readonly Camera _mainCamera;
-        //private readonly BoomController _boomController;
 
-
-
+        
         public MainController()
         {
             var inputManager = Singleton<InputManager>.Instance;
             _mainCamera = Camera.main;
-            //_boomController = new BoomController();
             _trash.Retain(inputManager.SubscribeOnSwipe(OnSwipe));
             _trash.Retain(inputManager.SubscribeOnTapTouch(OnTap));
 
@@ -41,21 +41,21 @@ namespace BomberOf2048.Controllers
             _mergedSections = new bool[FieldSize, FieldSize];
             
             /////////////////
-            ClearField();
+            //ClearField();
             /////////////////
             
             /////////////////
-            GameData.CurrentScore.Value = 0;
+            //GameData.CurrentScore.Value = 0;
             //GameData.HighScore.Value = 0;
             //GameData.Level.Value = 1;
             //GameData.LevelScore.Value = 0;
             
             
             
-            GameData.GameField[0,0].Value = 8;
-            //GameData.GameField[0,2].Value = 9;
-            //GameData.GameField[3,0].Value = 10;
-            //GameData.GameField[3,3].Value = 11;
+            // GameData.GameField[0,0].Value = 8;
+            // GameData.GameField[0,2].Value = 9;
+            // GameData.GameField[3,0].Value = 10;
+            // GameData.GameField[3,3].Value = 11;
             
             
             
@@ -64,9 +64,20 @@ namespace BomberOf2048.Controllers
 
         
 
-        public void Initialize()
+        public void SpawnStartSections()
         {
-            SpawnRandomSections(false);
+            var flag = true;
+            
+            for (int i = 0; i < FieldSize; i++)
+            {
+                for (int j = 0; j < FieldSize; j++)
+                {
+                    if (GameData.GameField[i, j].Value != 0)
+                        flag = false;
+                }
+            }
+            if(flag)
+                SpawnRandomSections(false);
         }
 
         private void OnTap(Vector2 position, float time)
@@ -77,8 +88,10 @@ namespace BomberOf2048.Controllers
             var screenPos = new Vector3(position.x, position.y, 0f);
             var worldPos = _mainCamera.ScreenToWorldPoint(screenPos);
             worldPos.z = 0f;
-            
-            var halfSectionSize = AnimationController.SectionSize / 2;
+
+            var spriteSize = 217f / 192f;
+            var sectionSize = spriteSize * AnimationController.SectionScale;
+            var halfSectionSize = sectionSize / 2;
             for (var i = 0; i < FieldSize; i++)
             {
                 var columnPos = AnimationController.SectionsPos[i, 0];
@@ -173,6 +186,7 @@ namespace BomberOf2048.Controllers
                             Debug.LogError("Game over!");
                             WindowUtils.CreateWindow("UI/GameOverWindow");
                             ClearField();
+                            Singleton<AdMobManager>.Instance.ShowAds();
                         }
                     }
                 }
@@ -190,7 +204,7 @@ namespace BomberOf2048.Controllers
                 x >= 0 && x < FieldSize && y >= 0 && y < FieldSize;
                 x += (int) swipeSide.x, y += (int) swipeSide.y)
             {
-                if(GameData.GameField[x, y].Value == 0/* || GameData.GameField[x, y].Value == 10*/)
+                if(GameData.GameField[x, y].Value == 0 || GameData.GameField[x, y].Value == 11)
                     continue;
 
                 if (GameData.GameField[x, y].Value == GameData.GameField[section[0], section[1]].Value
