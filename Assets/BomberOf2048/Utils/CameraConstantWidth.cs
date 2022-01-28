@@ -52,7 +52,6 @@ namespace BomberOf2048.Utils
         private float CalcVerticalFov(float hFovInDeg, float aspectRatio)
         {
             var hFovInRads = hFovInDeg * Mathf.Deg2Rad;
-
             var vFovInRads = 2 * Mathf.Atan(Mathf.Tan(hFovInRads / 2) / aspectRatio);
 
             return vFovInRads * Mathf.Rad2Deg;

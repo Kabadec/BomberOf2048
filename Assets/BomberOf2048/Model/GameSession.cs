@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections;
-using BomberOf2048.Components;
+﻿using BomberOf2048.Components;
 using BomberOf2048.Controllers;
 using BomberOf2048.Model.Data;
 using BomberOf2048.Utils;
 using BomberOf2048.Utils.Disposables;
-using GoogleMobileAds.Api;
 using UnityEngine;
 
 namespace BomberOf2048.Model
@@ -13,7 +10,12 @@ namespace BomberOf2048.Model
     public class GameSession : Singleton<GameSession>
     {
         [SerializeField] private GameData _data;
+        
+        [Header("Score controller parameters")]
+        [SerializeField] private float _firstLevelScore;
+        [SerializeField] private float _nextLevelModifier;
 
+        [Header("Prefabs and containers")]
         [SerializeField] private GameObject _sectionPrefab;
         [SerializeField] private GameObject _fieldContainer;
         [SerializeField] private GameObject _prefabSectionForAnim;
@@ -23,16 +25,14 @@ namespace BomberOf2048.Model
 
         [Header("LevelUp Particles")]
         [SerializeField] private LevelUpParticlesComponent _levelUpParticles;
-
-
-
+        
         public GameData Data => _data;
         public MainController MainController { get; private set; }
         public FieldViewController FieldViewController { get; private set; }
         public AnimationController AnimationController { get; private set; }
         public ScoreController ScoreController { get; private set; }
-        
         public BoomController BoomController { get; private set; }
+        
 
         private readonly CompositeDisposable _trash = new CompositeDisposable();
 
@@ -49,7 +49,7 @@ namespace BomberOf2048.Model
             AnimationController = new AnimationController(_prefabSectionForAnim);
             _trash.Retain(AnimationController);
 
-            ScoreController = new ScoreController(_levelUpParticles);
+            ScoreController = new ScoreController(_firstLevelScore, _nextLevelModifier, _levelUpParticles);
             _trash.Retain(ScoreController);
             ScoreController.AddScore(0);
 
@@ -69,46 +69,24 @@ namespace BomberOf2048.Model
             }
         }
 
-
-        // private void OnDrawGizmos()
-        // {
-        //     var prevColor = Gizmos.color;
-        //     Gizmos.color = Color.green;
-        //
-        //
-        //
-        //     var sectionSize = 1.13020833333f;//AnimationController.SectionScale;
-        //     var halfSectionSize = sectionSize / 2;
-        //
-        //     
-        //     var columnPos = AnimationController.SectionsPos[0, 0];
-        //     var startX = columnPos.x - halfSectionSize;
-        //     var endX = columnPos.x + halfSectionSize;
-        //     
-        //     
-        //     var linePos = AnimationController.SectionsPos[0, 0];
-        //     var startY = linePos.y - halfSectionSize;
-        //     var endY = linePos.y + halfSectionSize;
-        //     
-        //    Gizmos.DrawLine(new Vector3(startX, startY, 0f), new Vector3(endX, endY, 0f));
-        //    Gizmos.DrawLine(new Vector3(startX, startY, 0f), new Vector3(endX - sectionSize, endY, 0f));
-        //    Gizmos.DrawLine(new Vector3(startX, startY, 0f), new Vector3(endX, endY - sectionSize, 0f));
-        //    Gizmos.DrawLine(new Vector3(startX + sectionSize, startY, 0f), new Vector3(endX, endY, 0f));
-        //    Gizmos.DrawLine(new Vector3(startX, startY + sectionSize, 0f), new Vector3(endX, endY, 0f));
-        //    
-        //    Gizmos.color = prevColor;
-        //
-        // }
-
         private void Initialization()
         {
             _data.Initialize();
         }
-
-
+        
         private void OnDestroy()
         {
             _trash.Dispose();
         }
+        
+#if UNITY_EDITOR
+        [ContextMenu("Screenshot")]
+        private void Screenshot()
+        {
+            var currentDate = System.DateTime.Now;
+            ScreenCapture.CaptureScreenshot($"BomberOf2048 [{currentDate.Hour}.{currentDate.Minute}.{currentDate.Second}] [{currentDate.Day}-{currentDate.Month}-{currentDate.Year}].png");
+        }
+#endif
+        
     }
 }

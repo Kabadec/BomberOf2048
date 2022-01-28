@@ -1,5 +1,4 @@
-﻿using System;
-using BomberOf2048.Model;
+﻿using BomberOf2048.Model;
 using BomberOf2048.UI.Widgets.ProgressBar;
 using BomberOf2048.Utils;
 using BomberOf2048.Utils.Disposables;
@@ -28,7 +27,7 @@ namespace BomberOf2048.UI.Widgets
 
         private void SetLevel(int newvalue, int oldvalue)
         {
-            _level.text = (newvalue + 1).ToString();
+            _level.text = newvalue.ToString();
         }
     }
 }

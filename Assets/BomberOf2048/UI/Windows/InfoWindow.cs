@@ -10,12 +10,7 @@ namespace BomberOf2048.UI.Windows
         {
             InputLocker.Retain(this);
         }
-
-        protected override void Start()
-        {
-            base.Start();
-        }
-
+        
         public override void OnCloseAnimationComplete()
         {
             InputLocker.Release(this);

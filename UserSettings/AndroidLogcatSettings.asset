@@ -3,34 +3,16 @@
     "m_SelectedPackage": {
         "deviceId": "ce0717172131450c04",
         "name": "com.KabadecInc.BomberOf2048",
-        "processId": 9447,
+        "processId": 20532,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
         {
             "deviceId": "ce0717172131450c04",
-            "name": "com.KabadecInc.BomberOf2048",
-            "processId": 1260,
-            "exited": true
-        },
-        {
-            "deviceId": "ce0717172131450c04",
             "name": "com.sec.android.app.launcher",
             "processId": 7161,
             "exited": false
-        },
-        {
-            "deviceId": "ce0717172131450c04",
-            "name": "com.KabadecInc.BomberOf2048",
-            "processId": 4857,
-            "exited": true
-        },
-        {
-            "deviceId": "ce0717172131450c04",
-            "name": "com.KabadecInc.BomberOf2048",
-            "processId": 7637,
-            "exited": true
         },
         {
             "deviceId": "ce0717172131450c04",
@@ -42,12 +24,36 @@
             "deviceId": "ce0717172131450c04",
             "name": "com.android.settings",
             "processId": 6201,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "ce0717172131450c04",
             "name": "com.KabadecInc.BomberOf2048",
             "processId": 9447,
+            "exited": true
+        },
+        {
+            "deviceId": "ce0717172131450c04",
+            "name": "com.google.android.gms.ui",
+            "processId": 11965,
+            "exited": true
+        },
+        {
+            "deviceId": "ce0717172131450c04",
+            "name": "com.KabadecInc.BomberOf2048",
+            "processId": 11474,
+            "exited": true
+        },
+        {
+            "deviceId": "ce0717172131450c04",
+            "name": "com.google.android.gms.ui",
+            "processId": 19921,
+            "exited": false
+        },
+        {
+            "deviceId": "ce0717172131450c04",
+            "name": "com.KabadecInc.BomberOf2048",
+            "processId": 20532,
             "exited": false
         }
     ],

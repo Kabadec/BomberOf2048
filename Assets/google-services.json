@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "141643025039",
+    "project_id": "bomberof2048-36263869",
+    "storage_bucket": "bomberof2048-36263869.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:141643025039:android:a599cb944fef4d0a22befa",
+        "android_client_info": {
+          "package_name": "com.KabadecInc.BomberOf2048"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "141643025039-qs1vv8clpbgithsgp5cmo54tjes3lpu4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaJyTvZ7jXJw4R-77lfCr4htyDBK_p2WI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "141643025039-qs1vv8clpbgithsgp5cmo54tjes3lpu4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

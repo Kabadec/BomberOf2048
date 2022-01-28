@@ -16,3 +16,5 @@
 *.iml
 *.DotSettings.user
 /Assets/Plugins/Editor/JetBrains*
+/Assets/Firebase/Plugins/x86_64/FirebaseCppApp-8_7_0.so
+/Assets/Firebase/Plugins/x86_64/FirebaseCppApp-8_7_0.so.meta

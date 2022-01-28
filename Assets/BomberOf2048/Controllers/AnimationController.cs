@@ -12,6 +12,7 @@ namespace BomberOf2048.Controllers
         public Vector3[,] SectionsPos => FieldViewController.SectionsPos;
         public float SectionScale => FieldViewController.SectionScale;
         
+        
         private readonly GameObject _prefabSectionForAnim;
         private FieldViewController FieldViewController => Singleton<GameSession>.Instance.FieldViewController;
         

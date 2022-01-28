@@ -10,7 +10,6 @@ namespace BomberOf2048.Controllers
     public class BoomController
     {
         private GameData GameData => Singleton<GameSession>.Instance.Data;
-        
         private AnimationController AnimationController => Singleton<GameSession>.Instance.AnimationController;
         private ScoreController ScoreController => Singleton<GameSession>.Instance.ScoreController;
         private FieldViewController FieldViewController => Singleton<GameSession>.Instance.FieldViewController;
@@ -28,13 +27,28 @@ namespace BomberOf2048.Controllers
         public void Boom(int x, int y, Action onComplete)
         {
             var value = GameData.GameField[x, y].Value;
-            
             var checker = ValueBoom(value, x, y);
             
             if(checker)
                 onComplete?.Invoke();
         }
 
+        public bool IsHaveBombsOnField()
+        {
+            for (var i = 0; i < FieldSize; i++)
+            {
+                for (int j = 0; j < FieldSize; j++)
+                {
+                    var value = GameData.GameField[i, j].Value;
+                    if (value >= 8)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+        
+        
         private bool ValueBoom(int value, int x, int y)
         {
             switch (value)
@@ -57,35 +71,17 @@ namespace BomberOf2048.Controllers
                     break;
                 default:
                     return false;
-                    //break;
             }
 
             return true;
         }
 
-        public void SpawnParticles(int x, int y)
+        private void SpawnParticles(int x, int y)
         {
             var particlePos = new Vector3(FieldViewController.SectionsPos[x, y].x,
                 FieldViewController.SectionsPos[x, y].y, 0f);
             Pool.Instance.Get(_preMiddleParticles, particlePos, Vector3.one);
         }
-
-        public bool IsHaveBombsOnField()
-        {
-            for (var i = 0; i < FieldSize; i++)
-            {
-                for (int j = 0; j < FieldSize; j++)
-                {
-                    var value = GameData.GameField[i, j].Value;
-                    if (value >= 8)
-                        return true;
-                }
-            }
-
-            return false;
-        }
-
-        
 
         private void LittleBoom(int x, int y)
         {
@@ -98,7 +94,6 @@ namespace BomberOf2048.Controllers
         
         private void PreMiddleBoom(int x, int y)
         {
-            
             BoomSection(x - 1, y - 1);
             BoomSection(x - 1, y);
             BoomSection(x - 1 , y + 1);
@@ -106,7 +101,6 @@ namespace BomberOf2048.Controllers
             BoomSection(x, y - 1);
             BoomSection(x, y);
             BoomSection(x, y + 1);
-
             
             BoomSection(x + 1, y - 1);
             BoomSection(x + 1, y);
@@ -133,24 +127,24 @@ namespace BomberOf2048.Controllers
             }
         }
         
-
         private void BoomSection(int x, int y)
         {
-            if (x >= 0 && x < FieldSize && y >= 0 && y < FieldSize)
-            {
-                if(GameData.GameField[x, y].Value == 0)
-                    return;
-                var pos = new int[] {x, y};
-                var value = GameData.GameField[x, y].Value;
+            if (x < 0 || x >= FieldSize || y < 0 || y >= FieldSize) 
+                return;
+            
+            if(GameData.GameField[x, y].Value == 0)
+                return;
+            
+            var pos = new int[] {x, y};
+            var value = GameData.GameField[x, y].Value;
+            
+            var score = Mathf.Pow(2, value);
+            ScoreController.AddScore((int)score);
                 
-                var score = Mathf.Pow(2, value);
-                ScoreController.AddScore((int)score);
+            GameData.GameField[x, y].Value = 0;
                 
-                GameData.GameField[x, y].Value = 0;
-                
-                AnimationController.Boom(pos, value);
-                ValueBoom(value, x, y);
-            }
+            AnimationController.Boom(pos, value);
+            ValueBoom(value, x, y);
         }
     }
 }

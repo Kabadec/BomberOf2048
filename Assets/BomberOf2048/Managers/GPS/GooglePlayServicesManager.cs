@@ -6,7 +6,6 @@ using BomberOf2048.Utils;
 using BomberOf2048.Utils.Disposables;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
-using GooglePlayGames.BasicApi.SavedGame;
 using UnityEngine;
 
 namespace BomberOf2048.Managers.GPS
@@ -14,28 +13,28 @@ namespace BomberOf2048.Managers.GPS
     [RequireComponent(typeof(GpsDataSaver))]
     public class GooglePlayServicesManager : MonoBehaviour
     {
-        private readonly CompositeDisposable _trash = new CompositeDisposable();
-
-        private GameData Data => Singleton<GameSession>.Instance.Data;
-
-        private const string LeaderBoardId = "CgkIj5XU1I8EEAIQAg";
+        [SerializeField] private string _leaderBoardId = "CgkIj5XU1I8EEAIQAg";
 
         private GpsDataSaver _dataSaver;
+        private GameData Data => Singleton<GameSession>.Instance.Data;
+        
+        private readonly CompositeDisposable _trash = new CompositeDisposable();
 
         private void Start()
         {
             _dataSaver = GetComponent<GpsDataSaver>();
             
-            PlayGamesClientConfiguration config =
+            var config =
                 new PlayGamesClientConfiguration.Builder().EnableSavedGames().Build();
             PlayGamesPlatform.InitializeInstance(config);
-            PlayGamesPlatform.DebugLogEnabled = true;
+            //PlayGamesPlatform.DebugLogEnabled = true;
             PlayGamesPlatform.Activate();
             Social.localUser.Authenticate(success =>
             {
                 if (success)
                 {
                     _dataSaver.Initialize();
+                    Singleton<FirebaseAnalyticsManager>.Instance.AnalyticsLogin();
                 }
                 else
                 {
@@ -45,18 +44,16 @@ namespace BomberOf2048.Managers.GPS
             _trash.Retain(Data.Level.SubscribeAndInvoke(OnCurrentScoreChanged));
         }
 
-
         public void ShowLeaderboard()
         {
             Social.ShowLeaderboardUI();
+            Singleton<FirebaseAnalyticsManager>.Instance.AnalyticsViewLeaderboard();
         }
         
-
         private void OnCurrentScoreChanged(int newValue, int oldValue)
         {
-            Social.ReportScore(Data.Level.Value, LeaderBoardId, b => {});
+            Social.ReportScore(Data.Level.Value, _leaderBoardId, b => {});
         }
-        
 
         private void OnDestroy()
         {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace BomberOf2048.Components
@@ -9,7 +8,6 @@ namespace BomberOf2048.Components
         [SerializeField] private float[] _delays;
 
         private Coroutine _coroutine;
-
         private ParticleSystem[] _particles;
 
         private void Start()

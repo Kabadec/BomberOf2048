@@ -11,10 +11,7 @@ namespace BomberOf2048.Input
     public class InputManager : Singleton<InputManager>
     {
         [SerializeField] private float _swipeDeadZone = 70f;
-        [SerializeField] private float _tapDeadZone = 10f;
-        [SerializeField] private float _tapMaxTime = 0.5f;
 
-        
         public delegate void TapTouchEvent(Vector2 position, float time);
         public event TapTouchEvent OnTapTouch;
 
@@ -28,7 +25,6 @@ namespace BomberOf2048.Input
 
         private bool _isTouchStarted = false;
         private Vector2 _startTouchPos;
-        private float _startTouchTime;
         private bool _isFirstTouch = true;
         
         private Vector2 TouchPosition => _touchControls.Touch.TouchPosition.ReadValue<Vector2>();
@@ -45,31 +41,25 @@ namespace BomberOf2048.Input
             _touchControls.Touch.TouchPress.canceled += EndTouch;
             _touchControls.Touch.TouchTap.started += TapTouch;
         }
+        
+        public IDisposable SubscribeOnTapTouch(TapTouchEvent call)
+        {
+            OnTapTouch += call;
+            return new ActionDisposable(() => OnTapTouch -= call);
+        }
+        
+        public IDisposable SubscribeOnSwipe(SwipeEvent call)
+        {
+            OnSwipeEvent += call;
+            return new ActionDisposable(() => OnSwipeEvent -= call);
+        }
 
         private void Update()
         {
-            //Debug.Log(TouchPosition);
             if (!_isTouchStarted || _isFirstTouch)
-            {
-                
-                
-                
                 return;
-            }
-            
-            
             if (Vector2.Distance(_startTouchPos, TouchPosition) < _swipeDeadZone)
-            {
-                
-                
-                
-                
                 return;
-            }
-            
-            
-            
-            
             var dist = TouchPosition - _startTouchPos;
             if (Mathf.Abs(dist.x) >= Mathf.Abs(dist.y))
             {
@@ -82,7 +72,7 @@ namespace BomberOf2048.Input
 
             _isTouchStarted = false;
         }
-
+        
         private void StartTouch(InputAction.CallbackContext context)
         {
             if(InputLocker.IsLocked)
@@ -95,7 +85,6 @@ namespace BomberOf2048.Input
             
             _isTouchStarted = true;
             _startTouchPos = TouchPosition;
-            _startTouchTime = Time.time;
         }
         
         private void EndTouch(InputAction.CallbackContext context)
@@ -109,26 +98,13 @@ namespace BomberOf2048.Input
                 return;
             OnTapTouch?.Invoke(TouchPosition, (float)context.time);
         }
-
-        public IDisposable SubscribeOnTapTouch(TapTouchEvent call)
-        {
-            OnTapTouch += call;
-            return new ActionDisposable(() => OnTapTouch -= call);
-        }
         
-        public IDisposable SubscribeOnSwipe(SwipeEvent call)
-        {
-            OnSwipeEvent += call;
-            return new ActionDisposable(() => OnSwipeEvent -= call);
-        }
-
         private IEnumerator FirstTouchCoroutine()
         {
             yield return new WaitForSeconds(0.07f);
             _isTouchStarted = true;
             _isFirstTouch = false;
             _startTouchPos = TouchPosition;
-            _startTouchTime = Time.time;
         }
         
         private void OnEnable()

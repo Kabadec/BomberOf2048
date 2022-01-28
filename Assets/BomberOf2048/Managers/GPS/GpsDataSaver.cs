@@ -78,7 +78,7 @@ namespace BomberOf2048.Managers.GPS
                     
                     ((PlayGamesPlatform)Social.Active).SavedGame.CommitUpdate(meta, update, data, SaveUpdate);
                 }
-                else //Reading
+                else // Reading
                 {
                     ((PlayGamesPlatform)Social.Active).SavedGame.ReadBinaryData(meta, SaveRead);
                 }
@@ -112,6 +112,7 @@ namespace BomberOf2048.Managers.GPS
         private void SaveUpdate(SavedGameRequestStatus status, ISavedGameMetadata data)
         {
             Debug.Log(status);
+            Singleton<FirebaseAnalyticsManager>.Instance.AnalyticsGameSaved();
         }
         
         private string GetSaveString()
@@ -128,6 +129,7 @@ namespace BomberOf2048.Managers.GPS
 
         private void LoadSaveString(string save)
         {
+            Debug.Log($"LoadSaveString, save: {save}");
             if (save == "")
             {
                 OpenSave(true);
@@ -136,18 +138,11 @@ namespace BomberOf2048.Managers.GPS
             // 35|659|12864
             var data = save.Split('|');
             // data[0] = 35, data[1] = 659, data[2] = 12864;
-            Debug.Log($"LoadSaveString, save: {save}");
-            Debug.Log(data[0]);
-            Debug.Log(data[1]);
-            Debug.Log(data[2]);
-            
-                
             
             var level = int.Parse(data[0]);
             var levelScore = int.Parse(data[1]);
             var highScore = int.Parse(data[2]);
-
-
+            
             if (Data.Level.Value > level || Data.HighScore.Value > highScore)
             {
                 if (Data.Level.Value < level)
@@ -159,7 +154,7 @@ namespace BomberOf2048.Managers.GPS
                     Data.HighScore.Value = highScore;
 
                 OpenSave(true);
-                Debug.Log("Value on phone bolshe chem in save, start saving");
+                Debug.Log("The value written is greater than the value in the save, start saving");
             }
             else
             {
@@ -169,27 +164,6 @@ namespace BomberOf2048.Managers.GPS
                 Debug.Log("Restoring values in save");
             }
             Singleton<GameSession>.Instance.ScoreController.AddScore(0);
-        }
-        
-        public void ShowSelectSaveUI() {
-            const uint maxNumToDisplay = 5;
-            const bool allowCreateNew = false;
-            const bool allowDelete = true;
-
-            var savedGameClient = PlayGamesPlatform.Instance.SavedGame;
-            savedGameClient.ShowSelectSavedGameUI("Select saved game",
-                maxNumToDisplay,
-                allowCreateNew,
-                allowDelete,
-                OnSavedGameSelected);
-        }
-
-        private void OnSavedGameSelected (SelectUIStatus status, ISavedGameMetadata game) {
-            if (status == SelectUIStatus.SavedGameSelected) {
-                // handle selected game save
-            } else {
-                // handle cancel or error
-            }
         }
     }
 }

@@ -9,7 +9,6 @@ namespace BomberOf2048.Model.Definitions
         [SerializeField] private FieldRepository _fields;
 
         public SectionsRepository Sections => _sections;
-
         public FieldRepository Fields => _fields;
         
 

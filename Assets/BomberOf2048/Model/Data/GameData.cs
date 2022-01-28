@@ -1,7 +1,5 @@
 ﻿using System;
 using BomberOf2048.Model.Data.Properties;
-using BomberOf2048.Utils.Disposables;
-using GooglePlayGames;
 using UnityEngine;
 
 namespace BomberOf2048.Model.Data

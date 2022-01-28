@@ -8,7 +8,6 @@ namespace BomberOf2048.Components.Sections
     public class SectionEffectLerpColorComponent : Singleton<SectionEffectLerpColorComponent>
     {
         [SerializeField] private float _timeAnimation;
-
         [SerializeField] private SpriteRenderer _renderer;
         
         private Sequence _sequence;
@@ -23,16 +22,15 @@ namespace BomberOf2048.Components.Sections
             DoAnim();
         }
         
-        [ContextMenu("DoAnim")]
         private void DoAnim()
         {
             _renderer.color = _startColor;
-            var sequence = DOTween.Sequence();
+            _sequence = DOTween.Sequence();
             
-            sequence.Append(_renderer.DOColor(_endColor, _timeAnimation / 2).SetEase(Ease.InOutQuad));
-            sequence.Append(_renderer.DOColor(_startColor, _timeAnimation / 2).SetEase(Ease.InOutQuad));
+            _sequence.Append(_renderer.DOColor(_endColor, _timeAnimation / 2).SetEase(Ease.InOutQuad));
+            _sequence.Append(_renderer.DOColor(_startColor, _timeAnimation / 2).SetEase(Ease.InOutQuad));
 
-            sequence.AppendCallback(() =>
+            _sequence.AppendCallback(() =>
             {
                 _sequence.Kill();
                 DoAnim();

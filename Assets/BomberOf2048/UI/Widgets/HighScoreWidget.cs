@@ -11,7 +11,6 @@ namespace BomberOf2048.UI.Widgets
         [SerializeField] private Text _score;
 
         private readonly CompositeDisposable _trash = new CompositeDisposable();
-
         
         private void Start()
         {

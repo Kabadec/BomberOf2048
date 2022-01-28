@@ -7,8 +7,6 @@ namespace BomberOf2048.Model.Definitions
     public class FieldRepository : ScriptableObject
     {
         [SerializeField] private FieldDef[] _collection;
-
-        
         
         public Vector3 GetSectionPos(int fieldSize, int x, int y)
         {

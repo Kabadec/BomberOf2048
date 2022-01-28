@@ -1,5 +1,4 @@
-﻿using System;
-using BomberOf2048.Utils.ObjectPool;
+﻿using BomberOf2048.Utils.ObjectPool;
 using UnityEngine;
 
 namespace BomberOf2048.Components

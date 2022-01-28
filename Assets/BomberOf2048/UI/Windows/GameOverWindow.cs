@@ -10,17 +10,13 @@ namespace BomberOf2048.UI.Windows
     {
         [SerializeField] private Text _score;
         private Lock InputLocker => Singleton<InputManager>.Instance.InputLocker;
+        
         private void Awake()
         {
             _score.text = Singleton<GameSession>.Instance.Data.CurrentScore.Value.ToString();
             InputLocker.Retain(this);
         }
-
-        protected override void Start()
-        {
-            base.Start();
-        }
-
+        
         public override void OnCloseAnimationComplete()
         {
             InputLocker.Release(this);

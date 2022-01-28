@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
 namespace BomberOf2048.Utils.ObjectPool
 {

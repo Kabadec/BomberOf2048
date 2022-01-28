@@ -1,5 +1,4 @@
-﻿
-namespace BomberOf2048.Model.Data.Properties
+﻿namespace BomberOf2048.Model.Data.Properties
 {
     public abstract class PersistentProperty<TPropertyType> : ObservableProperty<TPropertyType>
     {

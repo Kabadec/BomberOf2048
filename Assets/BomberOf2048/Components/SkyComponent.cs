@@ -29,12 +29,12 @@ namespace BomberOf2048.Components
                 pos.y += _speed * Time.deltaTime;
                 child.position = pos;
 
-                if (child.position.y >= _maxY)
-                {
-                    var newPos = child.position;
-                    newPos.y = _minY;
-                    child.position = newPos;
-                }
+
+                if (!(child.position.y >= _maxY)) continue;
+                
+                var newPos = child.position;
+                newPos.y = _minY;
+                child.position = newPos;
             }
         }
     }

@@ -18,20 +18,10 @@ namespace BomberOf2048.Model.Definitions
     [Serializable]
     public struct SectionDef
     {
-        [SerializeField] private int _value;
-        [SerializeField] private Color _bgColor;
-        [SerializeField] private Color _textColor;
         [SerializeField] private Sprite _sprite;
         [SerializeField] private bool _isEffectEnable;
-
-        public int Value => _value;
-
-        public Color BgColor => _bgColor;
         
-        public Color TextColor => _textColor;
-
         public Sprite Sprite => _sprite;
-
         public bool IsEffectEnable => _isEffectEnable;
     }
 }

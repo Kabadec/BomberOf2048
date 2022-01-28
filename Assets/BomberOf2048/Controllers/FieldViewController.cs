@@ -2,7 +2,6 @@
 using BomberOf2048.Components.Sections;
 using BomberOf2048.Model;
 using BomberOf2048.Model.Data;
-using BomberOf2048.Model.Data.Properties;
 using BomberOf2048.Model.Definitions;
 using BomberOf2048.Utils;
 using UnityEngine;
@@ -18,9 +17,9 @@ namespace BomberOf2048.Controllers
         
         private readonly GameObject _sectionPrefab;
         private readonly GameObject _fieldContainer;
+        private SectionComponent[] _sectionWidgets;
         private GameData GameData => Singleton<GameSession>.Instance.Data;
         private int FieldSize => GameData.FieldSize;
-        private SectionComponent[] _sectionWidgets;
         
         public FieldViewController(GameObject sectionPrefab, GameObject fieldContainer)
         {
@@ -62,13 +61,7 @@ namespace BomberOf2048.Controllers
             var def = DefsFacade.I.Sections.Get(value);
             section.SetView(def);
         }
-
-        public void UpdateSectionCoordinates(int x, int y)
-        {
-            var section = GetSection(x, y);
-            section.SetCoordinates(x, y);
-        }
-
+        
         private void BuildField()
         {
             var childs = _fieldContainer.GetComponentsInChildren<SectionComponent>();
@@ -107,17 +100,15 @@ namespace BomberOf2048.Controllers
             return _sectionWidgets[number];
         }
         
-
+        private void UpdateSectionCoordinates(int x, int y)
+        {
+            var section = GetSection(x, y);
+            section.SetCoordinates(x, y);
+        }
+        
         public void Dispose()
         {
             
         }
     }
-    // [Serializable]
-    // public class SectionData
-    // {
-    //     private int _value = 0;
-    //
-    //     public int Value => _value;
-    // }
 }

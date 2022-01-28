@@ -1,5 +1,4 @@
-﻿using System;
-using BomberOf2048.Utils;
+﻿using BomberOf2048.Utils;
 using UnityEngine;
 
 namespace BomberOf2048.Components.Sections

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_web_client_id">
+  <string name="gcm_defaultSenderId" translatable="false">141643025039</string>
+  <string name="google_storage_bucket" translatable="false">bomberof2048-36263869.appspot.com</string>
+  <string name="project_id" translatable="false">bomberof2048-36263869</string>
+  <string name="google_api_key" translatable="false">AIzaSyBaJyTvZ7jXJw4R-77lfCr4htyDBK_p2WI</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBaJyTvZ7jXJw4R-77lfCr4htyDBK_p2WI</string>
+  <string name="google_app_id" translatable="false">1:141643025039:android:a599cb944fef4d0a22befa</string>
+  <string name="default_web_client_id" translatable="false">141643025039-qs1vv8clpbgithsgp5cmo54tjes3lpu4.apps.googleusercontent.com</string>
+</resources>
